@@ -599,3 +599,8 @@ html[lang="ta"] .pd-price { font-size: 1.25rem; }
   html[lang="ta"] .brand-sub { font-size: 0.62rem; }
   .lang-switch button { padding: 6px 7px; }
 }
+@media (max-width: 420px) {
+  .brand-sub { letter-spacing: 0.12em; }
+  .brand-mark { width: 34px; height: 34px; }
+  .header-inner { gap: 10px; }
+}

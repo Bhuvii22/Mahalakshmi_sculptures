@@ -15,7 +15,7 @@
 window.SITE = {
   business: {
     name: "Mahalakshmi Sculptures",
-    name_ta: "மகாலட்சுமி சிற்பங்கள்",
+    name_ta: "மகாலட்சுமி சிற்பக்கலைக்கூடம்",
     tagline: "Crafting Tradition. Preserving Divine Art.",
     tagline_ta: "பாரம்பரியத்தை வடிவமைக்கிறோம். தெய்வீகக் கலையைப் பாதுகாக்கிறோம்.",
     experienceYears: 25,
