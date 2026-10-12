@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- TODO: replace YOUR-DOMAIN and regenerate when products change -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://YOUR-DOMAIN/</loc></url>
+  <url><loc>https://YOUR-DOMAIN/collection.html</loc></url>
+  <url><loc>https://YOUR-DOMAIN/collection.html?cat=deity-statues</loc></url>
+  <url><loc>https://YOUR-DOMAIN/collection.html?cat=navagraha</loc></url>
+  <url><loc>https://YOUR-DOMAIN/collection.html?cat=sarpam</loc></url>
+  <url><loc>https://YOUR-DOMAIN/collection.html?cat=temple-sculptures</loc></url>
+  <url><loc>https://YOUR-DOMAIN/product.html?id=vinayagar-stone-statue</loc></url>
+  <url><loc>https://YOUR-DOMAIN/product.html?id=ghaja-lakshmi-stone-statue</loc></url>
+  <url><loc>https://YOUR-DOMAIN/product.html?id=raghu-stone-statue</loc></url>
+  <url><loc>https://YOUR-DOMAIN/product.html?id=ketu-stone-statue</loc></url>
+  <url><loc>https://YOUR-DOMAIN/product.html?id=sarpam-stone-statue</loc></url>
+  <url><loc>https://YOUR-DOMAIN/product.html?id=moonjur-stone-statue</loc></url>
+  <url><loc>https://YOUR-DOMAIN/product.html?id=coconut-sirpam-stone-statue</loc></url>
+</urlset>
