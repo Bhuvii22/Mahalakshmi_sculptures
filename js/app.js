@@ -24,7 +24,11 @@
   const collectionUrl = (c) => `collection.html?cat=${encodeURIComponent(c.id)}`;
   const homeLink = (hash) => (onHome ? hash : `index.html${hash}`);
   const waUrl = (text) => `https://wa.me/${B.whatsapp}?text=${encodeURIComponent(text)}`;
-  const location_ = [B.city, B.state].filter(Boolean).join(", ");
+  const { t, L } = window.I18N;
+  const lang = window.I18N.lang;
+  const biz = L(B, "name");
+  const location_ = [L(B, "city"), L(B, "state")].filter(Boolean).join(", ");
+  const genericWa = () => waUrl(t("wa.generic", { biz }));
 
   /* ---------- Icons (inline SVG, stroke-based) ---------- */
   const I = {
@@ -54,9 +58,19 @@
 
   /* ---------- Header ---------- */
   const NAV = [
-    ["Home", "#home"], ["About Us", "#about"], ["Our Collections", "#collections"],
-    ["Gallery", "#gallery"], ["Why Choose Us", "#why"], ["Contact", "#contact"]
+    ["nav.home", "#home"], ["nav.about", "#about"], ["nav.collections", "#collections"],
+    ["nav.gallery", "#gallery"], ["nav.why", "#why"], ["nav.contact", "#contact"]
   ];
+
+  const brandHTML = () => `
+    <span class="brand-mark">${I.lotus}</span>
+    <span class="brand-text"><span class="brand-name">${esc(t("brand.name"))}</span><span class="brand-sub">${esc(t("brand.sub", { city: L(B, "city") }))}</span></span>`;
+
+  const langSwitch = () => `
+    <div class="lang-switch" role="group" aria-label="${esc(t("lang.label"))}">
+      <button type="button" data-lang="en" lang="en" aria-pressed="${lang === "en"}">EN</button>
+      <button type="button" data-lang="ta" lang="ta" aria-pressed="${lang === "ta"}">தமிழ்</button>
+    </div>`;
 
   function renderHeader() {
     const el = $("#site-header");
@@ -64,20 +78,18 @@
     el.className = "site-header";
     el.innerHTML = `
       <div class="container header-inner">
-        <a class="brand" href="${onHome ? "#home" : "index.html"}" aria-label="${esc(B.name)} — home">
-          <span class="brand-mark">${I.lotus}</span>
-          <span class="brand-text"><span class="brand-name">Mahalakshmi</span><span class="brand-sub">Sculptures · ${esc(B.city)}</span></span>
-        </a>
+        <a class="brand" href="${onHome ? "#home" : "index.html"}" aria-label="${esc(biz)} — ${esc(t("nav.home"))}">${brandHTML()}</a>
         <nav class="main-nav" id="main-nav" aria-label="Main">
           <ul>
-            ${NAV.map(([label, hash]) => `<li><a href="${homeLink(hash)}">${label}</a></li>`).join("")}
-            <li class="mobile-cta"><button type="button" class="btn" data-quote>Request a Quote</button></li>
-            <li class="mobile-cta"><a class="btn btn-wa" href="${waUrl(`Hello ${B.name}, I would like to enquire about your sculptures.`)}" target="_blank" rel="noopener">${I.whatsapp} WhatsApp Us</a></li>
+            ${NAV.map(([key, hash]) => `<li><a href="${homeLink(hash)}">${esc(t(key))}</a></li>`).join("")}
+            <li class="mobile-cta"><button type="button" class="btn" data-quote>${esc(t("cta.quote"))}</button></li>
+            <li class="mobile-cta"><a class="btn btn-wa" href="${genericWa()}" target="_blank" rel="noopener">${I.whatsapp} ${esc(t("cta.waUs"))}</a></li>
           </ul>
         </nav>
         <div class="header-cta">
-          <button type="button" class="btn" data-quote>Request a Quote</button>
-          <button type="button" class="nav-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="Open menu"><span></span></button>
+          ${langSwitch()}
+          <button type="button" class="btn" data-quote>${esc(t("cta.quoteShort"))}</button>
+          <button type="button" class="nav-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="${esc(t("nav.openMenu"))}"><span></span></button>
         </div>
       </div>`;
 
@@ -85,7 +97,7 @@
     const nav = $("#main-nav", el);
     const setOpen = (open) => {
       toggle.setAttribute("aria-expanded", String(open));
-      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      toggle.setAttribute("aria-label", t(open ? "nav.closeMenu" : "nav.openMenu"));
       nav.classList.toggle("is-open", open);
       document.body.classList.toggle("no-scroll", open);
     };
@@ -94,7 +106,7 @@
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && nav.classList.contains("is-open")) { setOpen(false); toggle.focus(); }
     });
-    window.matchMedia("(min-width: 1081px)").addEventListener("change", (m) => { if (m.matches) setOpen(false); });
+    window.matchMedia("(min-width: 1241px)").addEventListener("change", (m) => { if (m.matches) setOpen(false); });
 
     const onScroll = () => el.classList.toggle("is-scrolled", window.scrollY > 12);
     onScroll();
@@ -113,6 +125,11 @@
     }
   }
 
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-lang]");
+    if (b) window.I18N.setLang(b.dataset.lang);
+  });
+
   /* ---------- Footer ---------- */
   function renderFooter() {
     const el = $("#site-footer");
@@ -124,38 +141,35 @@
       <div class="container">
         <div class="footer-grid">
           <div>
-            <a class="brand" href="${onHome ? "#home" : "index.html"}">
-              <span class="brand-mark">${I.lotus}</span>
-              <span class="brand-text"><span class="brand-name">Mahalakshmi</span><span class="brand-sub">Sculptures · ${esc(B.city)}</span></span>
-            </a>
-            <p class="footer-tagline">${esc(B.tagline)}</p>
-            <p>Traditional stone sculptures and temple statues from ${esc(location_)}, with over ${B.experienceYears} years of experience in the sculpture business.</p>
+            <a class="brand" href="${onHome ? "#home" : "index.html"}">${brandHTML()}</a>
+            <p class="footer-tagline">${esc(L(B, "tagline"))}</p>
+            <p>${esc(t("footer.about", { loc: location_, years: B.experienceYears }))}</p>
             ${socials.length ? `<div class="social">${socials.map(([k, url]) => `<a href="${esc(url)}" target="_blank" rel="noopener" aria-label="${k}">${I[k] || ""}</a>`).join("")}</div>` : ""}
           </div>
           <div>
-            <h4>Explore</h4>
-            <ul>${NAV.map(([label, hash]) => `<li><a href="${homeLink(hash)}">${label}</a></li>`).join("")}</ul>
+            <h4>${esc(t("footer.explore"))}</h4>
+            <ul>${NAV.map(([key, hash]) => `<li><a href="${homeLink(hash)}">${esc(t(key))}</a></li>`).join("")}</ul>
           </div>
           <div>
-            <h4>Collections</h4>
-            <ul>${S.categories.map((c) => `<li><a href="${collectionUrl(c)}">${esc(c.name)}</a></li>`).join("")}
-              <li><a href="collection.html">View all products</a></li></ul>
+            <h4>${esc(t("footer.collections"))}</h4>
+            <ul>${S.categories.map((c) => `<li><a href="${collectionUrl(c)}">${esc(L(c, "name"))}</a></li>`).join("")}
+              <li><a href="collection.html">${esc(t("footer.viewAll"))}</a></li></ul>
           </div>
           <div>
-            <h4>Contact</h4>
+            <h4>${esc(t("footer.contact"))}</h4>
             <ul>
-              <li>${esc(B.name)}<br>${esc(B.address || location_)}</li>
+              <li>${esc(biz)}<br>${esc(L(B, "address") || location_)}</li>
               <li><a href="tel:${B.phone}">${esc(B.phoneDisplay)}</a></li>
-              <li><a href="${waUrl(`Hello ${B.name}, I would like to enquire about your sculptures.`)}" target="_blank" rel="noopener">WhatsApp enquiry</a></li>
+              <li><a href="${genericWa()}" target="_blank" rel="noopener">${esc(t("footer.waEnquiry"))}</a></li>
               ${B.email ? `<li><a href="mailto:${esc(B.email)}">${esc(B.email)}</a></li>` : ""}
-              ${B.hours ? `<li>${esc(B.hours)}</li>` : ""}
-              <li><a href="${esc(B.indiamart)}" target="_blank" rel="noopener">IndiaMART profile ↗</a></li>
+              ${B.hours ? `<li>${esc(L(B, "hours"))}</li>` : ""}
+              <li><a href="${esc(B.indiamart)}" target="_blank" rel="noopener">${esc(t("footer.indiamart"))}</a></li>
             </ul>
           </div>
         </div>
         <div class="footer-bottom">
-          <span>© ${new Date().getFullYear()} ${esc(B.name)}, ${esc(location_)}. All rights reserved.</span>
-          <span>${esc(B.tagline)}</span>
+          <span>© ${new Date().getFullYear()} ${esc(biz)}, ${esc(location_)}. ${esc(t("footer.rights"))}</span>
+          <span>${esc(L(B, "tagline"))}</span>
         </div>
       </div>`;
   }
@@ -164,10 +178,10 @@
   function renderWaFloat() {
     const a = document.createElement("a");
     a.className = "wa-float";
-    a.href = waUrl(`Hello ${B.name}, I would like to enquire about your sculptures.`);
+    a.href = genericWa();
     a.target = "_blank";
     a.rel = "noopener";
-    a.setAttribute("aria-label", "Chat with us on WhatsApp");
+    a.setAttribute("aria-label", t("cta.waFloat"));
     a.innerHTML = I.whatsapp;
     document.body.appendChild(a);
   }
@@ -178,15 +192,16 @@
 
   function productCard(p) {
     const c = catById(p.category);
+    const name = L(p, "name");
     return `
       <article class="product-card fade-up">
-        <div class="media-zoom"><a href="${productUrl(p)}" tabindex="-1" aria-hidden="true">${img(p.images[0], p.name)}</a></div>
+        <div class="media-zoom"><a href="${productUrl(p)}" tabindex="-1" aria-hidden="true">${img(p.images[0], name)}</a></div>
         <div class="product-meta">
-          ${c ? `<span class="product-cat">${esc(c.name)}</span>` : ""}
-          <h3><a href="${productUrl(p)}">${esc(p.name)}</a></h3>
+          ${c ? `<span class="product-cat">${esc(L(c, "name"))}</span>` : ""}
+          <h3><a href="${productUrl(p)}">${esc(name)}</a></h3>
           <div class="card-actions">
-            <a class="btn btn-outline btn-sm" href="${productUrl(p)}">View Details</a>
-            <button type="button" class="btn btn-sm" data-quote="${esc(p.id)}">Enquire</button>
+            <a class="btn btn-outline btn-sm" href="${productUrl(p)}">${esc(t("card.details"))}</a>
+            <button type="button" class="btn btn-sm" data-quote="${esc(p.id)}">${esc(t("card.enquire"))}</button>
           </div>
         </div>
       </article>`;
@@ -194,18 +209,19 @@
 
   function collectionCard(c) {
     const n = productsIn(c.id).length;
+    const name = L(c, "name");
     return `
       <article class="collection-card fade-up">
         <div class="media-zoom">
-          <a href="${collectionUrl(c)}" tabindex="-1" aria-hidden="true">${img(c.image, c.name)}</a>
-          <span class="count-tag">${n} ${n === 1 ? "design" : "designs"}</span>
+          <a href="${collectionUrl(c)}" tabindex="-1" aria-hidden="true">${img(c.image, name)}</a>
+          <span class="count-tag">${esc(n === 1 ? t("col.design1") : t("col.designN", { n }))}</span>
         </div>
         <div class="collection-body">
-          <h3><a href="${collectionUrl(c)}">${esc(c.name)}</a></h3>
-          <p>${esc(c.description)}</p>
+          <h3><a href="${collectionUrl(c)}">${esc(name)}</a></h3>
+          <p>${esc(L(c, "description"))}</p>
           <div class="card-actions">
-            <a class="btn btn-outline btn-sm" href="${collectionUrl(c)}">View Collection</a>
-            <button type="button" class="btn btn-sm" data-quote="cat:${esc(c.id)}">Enquire About Products</button>
+            <a class="btn btn-outline btn-sm" href="${collectionUrl(c)}">${esc(t("col.view"))}</a>
+            <button type="button" class="btn btn-sm" data-quote="cat:${esc(c.id)}">${esc(t("col.enquire"))}</button>
           </div>
         </div>
       </article>`;
@@ -215,69 +231,71 @@
     <article class="collection-card cta-card fade-up">
       <span class="icon">${I.search}</span>
       <div class="cta-text">
-        <h3>Looking for something specific?</h3>
-        <p>Tell us the deity, size or design you have in mind and we will let you know what is possible.</p>
+        <h3>${esc(t("col.ctaTitle"))}</h3>
+        <p>${esc(t("col.ctaText"))}</p>
       </div>
-      <div><button type="button" class="btn btn-gold" data-quote="other">Share Your Requirement</button></div>
+      <div><button type="button" class="btn btn-gold" data-quote="other">${esc(t("col.ctaBtn"))}</button></div>
     </article>`;
 
   /* ---------- Enquiry form ---------- */
   function productOptions(selected) {
     const groups = S.categories.map((c) => {
-      const items = productsIn(c.id);
-      return `<optgroup label="${esc(c.name)}">
-        <option value="${esc(c.name)} (any)"${selected === `cat:${c.id}` ? " selected" : ""}>${esc(c.name)} — any / not sure</option>
-        ${items.map((p) => `<option value="${esc(p.name)}"${selected === p.id ? " selected" : ""}>${esc(p.name)}</option>`).join("")}
+      const cat = L(c, "name");
+      return `<optgroup label="${esc(cat)}">
+        <option value="${esc(t("form.anyValue", { cat }))}"${selected === `cat:${c.id}` ? " selected" : ""}>${esc(t("form.any", { cat }))}</option>
+        ${productsIn(c.id).map((p) => `<option value="${esc(L(p, "name"))}"${selected === p.id ? " selected" : ""}>${esc(L(p, "name"))}</option>`).join("")}
       </optgroup>`;
     }).join("");
-    return `<option value="">Select a product or category</option>${groups}
-      <option value="Other / custom requirement"${selected === "other" ? " selected" : ""}>Other / custom requirement</option>`;
+    return `<option value="">${esc(t("form.select"))}</option>${groups}
+      <option value="${esc(t("form.other"))}"${selected === "other" ? " selected" : ""}>${esc(t("form.other"))}</option>`;
   }
 
   function formHTML(prefix, { selected = "", qty = 1 } = {}) {
     const id = (n) => `${prefix}-${n}`;
     const viaWa = !S.enquiry.endpoint;
+    const req = '<span class="req" aria-hidden="true">*</span>';
+    const opt = `<span class="opt">${esc(t("form.optional"))}</span>`;
     return `
       <form class="enquiry-form" novalidate data-prefix="${prefix}">
         <div class="form-grid">
           <div class="field">
-            <label for="${id("name")}">Full name <span class="req" aria-hidden="true">*</span></label>
+            <label for="${id("name")}">${esc(t("form.name"))} ${req}</label>
             <input id="${id("name")}" name="name" type="text" autocomplete="name" required aria-describedby="${id("name-err")}">
             <span class="error" id="${id("name-err")}" aria-live="polite"></span>
           </div>
           <div class="field">
-            <label for="${id("phone")}">Phone number <span class="req" aria-hidden="true">*</span></label>
-            <input id="${id("phone")}" name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="e.g. 98765 43210" aria-describedby="${id("phone-err")}">
+            <label for="${id("phone")}">${esc(t("form.phone"))} ${req}</label>
+            <input id="${id("phone")}" name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="${esc(t("form.phonePh"))}" aria-describedby="${id("phone-err")}">
             <span class="error" id="${id("phone-err")}" aria-live="polite"></span>
           </div>
           <div class="field">
-            <label for="${id("email")}">Email address <span class="opt">(optional)</span></label>
+            <label for="${id("email")}">${esc(t("form.email"))} ${opt}</label>
             <input id="${id("email")}" name="email" type="email" autocomplete="email" aria-describedby="${id("email-err")}">
             <span class="error" id="${id("email-err")}" aria-live="polite"></span>
           </div>
           <div class="field">
-            <label for="${id("qty")}">Quantity <span class="req" aria-hidden="true">*</span></label>
+            <label for="${id("qty")}">${esc(t("form.qty"))} ${req}</label>
             <input id="${id("qty")}" name="quantity" type="number" min="1" max="10000" step="1" value="${qty}" required aria-describedby="${id("qty-err")}">
             <span class="error" id="${id("qty-err")}" aria-live="polite"></span>
           </div>
           <div class="field full">
-            <label for="${id("product")}">Product or category of interest <span class="req" aria-hidden="true">*</span></label>
+            <label for="${id("product")}">${esc(t("form.product"))} ${req}</label>
             <select id="${id("product")}" name="product" required aria-describedby="${id("product-err")}">${productOptions(selected)}</select>
             <span class="error" id="${id("product-err")}" aria-live="polite"></span>
           </div>
           <div class="field full">
-            <label for="${id("size")}">Preferred size or material <span class="opt">(optional)</span></label>
-            <input id="${id("size")}" name="size" type="text" placeholder="e.g. 3 ft height, stone">
+            <label for="${id("size")}">${esc(t("form.size"))} ${opt}</label>
+            <input id="${id("size")}" name="size" type="text" placeholder="${esc(t("form.sizePh"))}">
           </div>
           <div class="field full">
-            <label for="${id("msg")}">Message or additional requirements</label>
-            <textarea id="${id("msg")}" name="message" rows="4" placeholder="Tell us where the sculpture will be placed, your timeline, delivery location, etc."></textarea>
+            <label for="${id("msg")}">${esc(t("form.msg"))}</label>
+            <textarea id="${id("msg")}" name="message" rows="4" placeholder="${esc(t("form.msgPh"))}"></textarea>
           </div>
           <div class="hp" aria-hidden="true"><label>Leave empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
         </div>
         <div class="form-actions">
-          <button type="submit" class="btn">${viaWa ? I.whatsapp : ""} Submit Enquiry</button>
-          ${viaWa ? `<p class="form-note">${I.whatsapp}<span>Your enquiry will open in WhatsApp, addressed to ${esc(B.phoneDisplay)}. Just tap <strong>Send</strong> to deliver it.</span></p>` : ""}
+          <button type="submit" class="btn">${viaWa ? I.whatsapp : ""} <span class="btn-label">${esc(t("form.submit"))}</span></button>
+          ${viaWa ? `<p class="form-note">${I.whatsapp}<span>${t("form.waNote", { phone: esc(B.phoneDisplay) })}</span></p>` : ""}
         </div>
         <div class="form-status" role="status" aria-live="polite"></div>
       </form>`;
@@ -290,11 +308,11 @@
     const phone = f.phone.value.replace(/[\s\-()]/g, "");
     const email = f.email.value.trim();
     const qty = Number(f.quantity.value);
-    if (name.length < 2) errors.name = "Please enter your name.";
-    if (!/^\+?\d{10,15}$/.test(phone)) errors.phone = "Please enter a valid phone number (at least 10 digits).";
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) errors.email = "Please enter a valid email address, or leave it blank.";
-    if (!Number.isInteger(qty) || qty < 1) errors.quantity = "Please enter a quantity of 1 or more.";
-    if (!f.product.value) errors.product = "Please choose a product or category.";
+    if (name.length < 2) errors.name = t("err.name");
+    if (!/^\+?\d{10,15}$/.test(phone)) errors.phone = t("err.phone");
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) errors.email = t("err.email");
+    if (!Number.isInteger(qty) || qty < 1) errors.quantity = t("err.qty");
+    if (!f.product.value) errors.product = t("err.product");
 
     const map = { name: "name", phone: "phone", email: "email", quantity: "qty", product: "product" };
     Object.entries(map).forEach(([field, key]) => {
@@ -309,17 +327,13 @@
   }
 
   function enquiryMessage(d) {
-    const lines = [
-      `Hello ${B.name}, I would like to make an enquiry.`,
-      "",
-      `*Product:* ${d.product}`,
-      `*Quantity:* ${d.quantity}`
-    ];
-    if (d.size) lines.push(`*Preferred size / material:* ${d.size}`);
-    lines.push(`*Name:* ${d.name}`, `*Phone:* ${d.phone}`);
-    if (d.email) lines.push(`*Email:* ${d.email}`);
-    if (d.message) lines.push("", `*Message:* ${d.message}`);
-    if (d.page) lines.push("", `(Sent from website: ${d.page})`);
+    const line = (key, v) => `*${t(key)}:* ${v}`;
+    const lines = [t("wa.intro", { biz }), "", line("wa.product", d.product), line("wa.qty", d.quantity)];
+    if (d.size) lines.push(line("wa.size", d.size));
+    lines.push(line("wa.name", d.name), line("wa.phone", d.phone));
+    if (d.email) lines.push(line("wa.email", d.email));
+    if (d.message) lines.push("", line("wa.msg", d.message));
+    if (d.page) lines.push("", t("wa.from", { url: d.page }));
     return lines.join("\n");
   }
 
@@ -341,6 +355,7 @@
         product: f.product.value,
         size: f.size.value.trim(),
         message: f.message.value.trim(),
+        language: lang,
         page: location.protocol.startsWith("http") ? location.href : ""
       };
       const wa = waUrl(enquiryMessage(data));
@@ -349,14 +364,15 @@
       if (!S.enquiry.endpoint) {
         window.open(wa, "_blank", "noopener");
         status.classList.add("info");
-        status.innerHTML = `Your enquiry has been prepared in WhatsApp. Please tap <strong>Send</strong> in WhatsApp to deliver it to us. WhatsApp didn't open? <a href="${wa}" target="_blank" rel="noopener">Click here to open it</a>.`;
+        status.innerHTML = t("status.wa", { url: wa });
         return;
       }
 
       // Backend configured → POST and only confirm on a successful response.
       const btn = form.querySelector("button[type=submit]");
+      const label = $(".btn-label", btn);
       btn.disabled = true;
-      btn.textContent = "Sending…";
+      label.textContent = t("form.sending");
       try {
         const res = await fetch(S.enquiry.endpoint, {
           method: "POST",
@@ -366,13 +382,13 @@
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         form.reset();
         status.classList.add("success");
-        status.innerHTML = `Thank you, ${esc(data.name)}. Your enquiry has been submitted and we will contact you soon. For a faster reply, you can also <a href="${wa}" target="_blank" rel="noopener">send it on WhatsApp</a>.`;
+        status.innerHTML = t("status.ok", { name: esc(data.name), url: wa });
       } catch (err) {
         status.classList.add("error");
-        status.innerHTML = `Sorry, we could not submit your enquiry right now. Please <a href="${wa}" target="_blank" rel="noopener">send it on WhatsApp</a> or call <a href="tel:${B.phone}">${esc(B.phoneDisplay)}</a>.`;
+        status.innerHTML = t("status.fail", { url: wa, tel: B.phone, phone: esc(B.phoneDisplay) });
       } finally {
         btn.disabled = false;
-        btn.textContent = "Submit Enquiry";
+        label.textContent = t("form.submit");
       }
     });
   }
@@ -388,10 +404,10 @@
     m.setAttribute("aria-labelledby", "quote-title");
     m.innerHTML = `
       <div class="modal-dialog">
-        <button type="button" class="modal-close" aria-label="Close">${I.close}</button>
+        <button type="button" class="modal-close" aria-label="${esc(t("modal.close"))}">${I.close}</button>
         <div class="form-card">
-          <h2 id="quote-title">Request a Quote</h2>
-          <p class="modal-sub">Share a few details and we will get back to you with product information and pricing.</p>
+          <h2 id="quote-title">${esc(t("modal.title"))}</h2>
+          <p class="modal-sub">${esc(t("modal.sub"))}</p>
           <div class="modal-form"></div>
         </div>
       </div>`;
@@ -427,11 +443,11 @@
   }
 
   document.addEventListener("click", (e) => {
-    const t = e.target.closest("[data-quote]");
-    if (!t) return;
+    const tgt = e.target.closest("[data-quote]");
+    if (!tgt) return;
     e.preventDefault();
     const qtyInput = $("#pd-qty");
-    openModal(t.dataset.quote, t.hasAttribute("data-use-qty") && qtyInput ? Math.max(1, parseInt(qtyInput.value, 10) || 1) : 1);
+    openModal(tgt.dataset.quote, tgt.hasAttribute("data-use-qty") && qtyInput ? Math.max(1, parseInt(qtyInput.value, 10) || 1) : 1);
   });
 
   /* ---------- Lightbox ---------- */
@@ -442,12 +458,12 @@
     lb.id = "lightbox";
     lb.setAttribute("role", "dialog");
     lb.setAttribute("aria-modal", "true");
-    lb.setAttribute("aria-label", "Image viewer");
+    lb.setAttribute("aria-label", t("lb.label"));
     lb.innerHTML = `
-      <button type="button" class="lb-btn lb-close" aria-label="Close viewer">${I.close}</button>
-      <button type="button" class="lb-btn lb-prev" aria-label="Previous image">${I.prev}</button>
+      <button type="button" class="lb-btn lb-close" aria-label="${esc(t("lb.close"))}">${I.close}</button>
+      <button type="button" class="lb-btn lb-prev" aria-label="${esc(t("lb.prev"))}">${I.prev}</button>
       <figure><img alt=""><figcaption></figcaption></figure>
-      <button type="button" class="lb-btn lb-next" aria-label="Next image">${I.next}</button>`;
+      <button type="button" class="lb-btn lb-next" aria-label="${esc(t("lb.next"))}">${I.next}</button>`;
     document.body.appendChild(lb);
     lb.addEventListener("click", (e) => {
       if (e.target.closest(".lb-close") || e.target === lb) closeLightbox();
@@ -476,7 +492,7 @@
     im.src = it.src;
     im.alt = it.alt;
     im.style.animation = "none"; void im.offsetWidth; im.style.animation = "";
-    $("figcaption", lb).innerHTML = `${esc(it.alt)}${it.href ? `<br><a href="${it.href}">View product details →</a>` : ""}`;
+    $("figcaption", lb).innerHTML = `${esc(it.alt)}${it.href ? `<br><a href="${it.href}">${esc(t("lb.details"))}</a>` : ""}`;
     const multi = LB.items.length > 1;
     $(".lb-prev", lb).hidden = !multi;
     $(".lb-next", lb).hidden = !multi;
@@ -498,6 +514,8 @@
 
   /* ---------- Home page ---------- */
   function renderHome() {
+    if (lang !== "en") document.title = t("meta.home.title");
+
     const col = $("#collection-grid");
     if (col) col.innerHTML = S.categories.map(collectionCard).join("") + requirementCard();
 
@@ -506,16 +524,17 @@
 
     // Gallery: every image of every product
     const gallery = [];
-    S.products.forEach((p) => p.images.forEach((src) => gallery.push({ src, alt: p.name, cat: p.category, href: productUrl(p) })));
+    S.products.forEach((p) => p.images.forEach((src) => gallery.push({ src, alt: L(p, "name"), cat: p.category, href: productUrl(p) })));
     const grid = $("#gallery-grid");
     const bar = $("#gallery-filters");
     if (grid && bar) {
+      bar.setAttribute("aria-label", t("gal.filterLabel"));
       const used = S.categories.filter((c) => gallery.some((g) => g.cat === c.id));
-      bar.innerHTML = [`<button type="button" class="filter-btn" data-filter="all" aria-pressed="true">All</button>`]
-        .concat(used.map((c) => `<button type="button" class="filter-btn" data-filter="${c.id}" aria-pressed="false">${esc(c.name.replace(/ Stone Statues| Stone Sculptures/, ""))}</button>`))
+      bar.innerHTML = [`<button type="button" class="filter-btn" data-filter="all" aria-pressed="true">${esc(t("gal.all"))}</button>`]
+        .concat(used.map((c) => `<button type="button" class="filter-btn" data-filter="${c.id}" aria-pressed="false">${esc(L(c, "short") || L(c, "name"))}</button>`))
         .join("");
       grid.innerHTML = gallery.map((g, i) => `
-        <button type="button" class="gallery-item" data-cat="${g.cat}" data-index="${i}" aria-label="Enlarge image: ${esc(g.alt)}">
+        <button type="button" class="gallery-item" data-cat="${g.cat}" data-index="${i}" aria-label="${esc(t("gal.enlarge", { name: g.alt }))}">
           ${img(g.src, g.alt)}<span class="cap" aria-hidden="true">${esc(g.alt)}</span>
         </button>`).join("");
 
@@ -543,8 +562,8 @@
     if (vids && S.videos && S.videos.length) {
       vids.hidden = false;
       vids.innerHTML = S.videos.map((v) => `
-        <figure><iframe src="https://www.youtube-nocookie.com/embed/${esc(v.youtubeId)}" title="${esc(v.title)}" loading="lazy"
-          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><figcaption>${esc(v.title)}</figcaption></figure>`).join("");
+        <figure><iframe src="https://www.youtube-nocookie.com/embed/${esc(v.youtubeId)}" title="${esc(L(v, "title"))}" loading="lazy"
+          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe><figcaption>${esc(L(v, "title"))}</figcaption></figure>`).join("");
     }
 
     const form = $("#enquiry-form-holder");
@@ -556,18 +575,21 @@
   function renderContact() {
     const list = $("#contact-list");
     if (!list) return;
-    const row = (icon, label, value) => `<li><span class="icon">${I[icon]}</span><div><span class="label">${label}</span><span class="value">${value}</span></div></li>`;
+    const row = (icon, label, value) => `<li><span class="icon">${I[icon]}</span><div><span class="label">${esc(t(label))}</span><span class="value">${value}</span></div></li>`;
     list.innerHTML = [
-      row("store", "Business", `${esc(B.name)}${B.owner ? `<br><small>Proprietor: ${esc(B.owner)}</small>` : ""}`),
-      row("pin", "Location", esc(B.address || location_)),
-      row("phone", "Phone", `<a href="tel:${B.phone}">${esc(B.phoneDisplay)}</a>`),
-      row("whatsapp", "WhatsApp", `<a href="${waUrl(`Hello ${B.name}, I would like to enquire about your sculptures.`)}" target="_blank" rel="noopener">${esc(B.phoneDisplay)}</a>`),
-      B.email ? row("mail", "Email", `<a href="mailto:${esc(B.email)}">${esc(B.email)}</a>`) : "",
-      B.hours ? row("clock", "Business hours", esc(B.hours)) : "",
-      row("quote", "Also on", `<a href="${esc(B.indiamart)}" target="_blank" rel="noopener">IndiaMART business profile ↗</a>`)
+      row("store", "contact.business", `${esc(biz)}${B.owner ? `<br><small>${esc(t("contact.owner", { owner: L(B, "owner") }))}</small>` : ""}`),
+      row("pin", "contact.location", esc(L(B, "address") || location_)),
+      row("phone", "contact.phone", `<a href="tel:${B.phone}">${esc(B.phoneDisplay)}</a>`),
+      row("whatsapp", "contact.whatsapp", `<a href="${genericWa()}" target="_blank" rel="noopener">${esc(B.phoneDisplay)}</a>`),
+      B.email ? row("mail", "contact.email", `<a href="mailto:${esc(B.email)}">${esc(B.email)}</a>`) : "",
+      B.hours ? row("clock", "contact.hours", esc(L(B, "hours"))) : "",
+      row("quote", "contact.also", `<a href="${esc(B.indiamart)}" target="_blank" rel="noopener">${esc(t("contact.indiamart"))}</a>`)
     ].join("");
     const map = $("#map-frame");
-    if (map) map.src = `https://www.google.com/maps?q=${encodeURIComponent(B.address || B.mapQuery)}&output=embed`;
+    if (map) {
+      map.title = t("contact.mapTitle", { loc: location_ });
+      map.src = `https://www.google.com/maps?q=${encodeURIComponent(B.address || B.mapQuery)}&hl=${lang}&output=embed`;
+    }
   }
 
   /* ---------- Collection page ---------- */
@@ -575,19 +597,23 @@
     const params = new URLSearchParams(location.search);
     const cat = catById(params.get("cat"));
     const list = cat ? productsIn(cat.id) : S.products;
-    const title = cat ? cat.name : "All Sculptures";
-    document.title = `${title} | ${B.name}, ${B.city}`;
-    setMeta("description", cat ? `${cat.description} Enquire with ${B.name}, ${location_}.` : `Browse stone statues and temple sculptures from ${B.name}, ${location_}. Enquire for sizes and pricing.`);
+    const title = cat ? L(cat, "name") : t("coll.all");
+    document.title = `${title} | ${biz}, ${L(B, "city")}`;
+    setMeta("description", cat
+      ? t("coll.metaCat", { desc: L(cat, "description"), biz, loc: location_ })
+      : t("coll.metaAll", { biz, loc: location_ }));
 
     $("#crumb-current").textContent = title;
     $("#collection-title").textContent = title;
-    $("#collection-desc").textContent = cat ? cat.description : "Browse our stone statues and temple sculptures. Select any piece to view details or request a quote.";
-    $("#collection-chips").innerHTML =
-      `<a class="chip" href="collection.html"${!cat ? ' aria-current="page"' : ""}>All</a>` +
-      S.categories.map((c) => `<a class="chip" href="${collectionUrl(c)}"${cat && cat.id === c.id ? ' aria-current="page"' : ""}>${esc(c.name)}</a>`).join("");
+    $("#collection-desc").textContent = cat ? L(cat, "description") : t("coll.allDesc");
+    const chips = $("#collection-chips");
+    chips.setAttribute("aria-label", t("coll.chipsLabel"));
+    chips.innerHTML =
+      `<a class="chip" href="collection.html"${!cat ? ' aria-current="page"' : ""}>${esc(t("coll.allChip"))}</a>` +
+      S.categories.map((c) => `<a class="chip" href="${collectionUrl(c)}"${cat && cat.id === c.id ? ' aria-current="page"' : ""}>${esc(L(c, "name"))}</a>`).join("");
     $("#product-grid").innerHTML = list.length
       ? list.map(productCard).join("")
-      : `<p class="empty-state">No products in this collection yet. <button type="button" class="btn btn-sm" data-quote="other">Tell us what you need</button></p>`;
+      : `<p class="empty-state">${esc(t("coll.empty"))} <button type="button" class="btn btn-sm" data-quote="other">${esc(t("coll.emptyBtn"))}</button></p>`;
     const q = $("#collection-enquire");
     if (q) q.dataset.quote = cat ? `cat:${cat.id}` : "";
   }
@@ -597,86 +623,87 @@
     const p = productById(new URLSearchParams(location.search).get("id"));
     const root = $("#product-root");
     if (!p) {
-      root.innerHTML = `<div class="container empty-state"><h1>Product not found</h1><p>This product may have been moved or renamed.</p><a class="btn" href="collection.html">Browse all sculptures</a></div>`;
+      root.innerHTML = `<div class="container empty-state"><h1>${esc(t("pd.notFound"))}</h1><p>${esc(t("pd.notFoundText"))}</p><a class="btn" href="collection.html">${esc(t("pd.browse"))}</a></div>`;
       return;
     }
     const c = catById(p.category);
-    document.title = `${p.name} | ${B.name}, ${B.city}`;
-    setMeta("description", `${p.description} Enquire for sizes and pricing — ${B.name}, ${location_}.`.slice(0, 300));
-    setMeta("og:title", `${p.name} | ${B.name}`, "property");
-    setMeta("og:description", p.description, "property");
+    const name = L(p, "name");
+    const desc = L(p, "description");
+    document.title = `${name} | ${biz}, ${L(B, "city")}`;
+    setMeta("description", t("pd.meta", { desc, biz, loc: location_ }).slice(0, 300));
+    setMeta("og:title", `${name} | ${biz}`, "property");
+    setMeta("og:description", desc, "property");
     setMeta("og:image", absUrl(p.images[0]), "property");
 
     const specs = [
-      ["Category", c ? `<a href="${collectionUrl(c)}">${esc(c.name)}</a>` : null],
-      ["Material", p.material], ["Finish", p.finish], ["Height", p.height],
-      ["Dimensions", p.dimensions], ["Weight", p.weight], ["Availability", p.availability]
+      ["pd.category", c ? `<a href="${collectionUrl(c)}">${esc(L(c, "name"))}</a>` : null, true],
+      ["pd.material", L(p, "material")], ["pd.finish", L(p, "finish")], ["pd.height", L(p, "height")],
+      ["pd.dimensions", L(p, "dimensions")], ["pd.weight", L(p, "weight")], ["pd.availability", L(p, "availability")]
     ].filter(([, v]) => v);
 
     const waMsg = () => {
       const q = Math.max(1, parseInt($("#pd-qty").value, 10) || 1);
-      return `Hello ${B.name}, I am interested in the *${p.name}* (quantity: ${q}). Please share available sizes and pricing.` +
-        (location.protocol.startsWith("http") ? `\n${location.href}` : "");
+      return t("wa.pd", { biz, name, q }) + (location.protocol.startsWith("http") ? `\n${location.href}` : "");
     };
 
     root.innerHTML = `
       <div class="page-hero" style="padding-bottom:28px">
         <div class="container">
-          <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="collection.html">Collections</a></li>
-            ${c ? `<li><a href="${collectionUrl(c)}">${esc(c.name)}</a></li>` : ""}
-            <li><span aria-current="page">${esc(p.name)}</span></li>
+          <nav class="breadcrumb" aria-label="${esc(t("crumb.label"))}"><ol>
+            <li><a href="index.html">${esc(t("crumb.home"))}</a></li>
+            <li><a href="collection.html">${esc(t("crumb.collections"))}</a></li>
+            ${c ? `<li><a href="${collectionUrl(c)}">${esc(L(c, "name"))}</a></li>` : ""}
+            <li><span aria-current="page">${esc(name)}</span></li>
           </ol></nav>
         </div>
       </div>
       <section style="padding-top:48px">
         <div class="container pd-grid">
           <div class="pd-gallery">
-            <button type="button" class="pd-main" aria-label="Enlarge image">${`<img src="${esc(p.images[0])}" alt="${esc(p.name)}" width="750" height="1000">`}</button>
+            <button type="button" class="pd-main" aria-label="${esc(t("pd.enlarge"))}"><img src="${esc(p.images[0])}" alt="${esc(name)}" width="750" height="1000"></button>
             ${p.images.length > 1 ? `<div class="pd-thumbs">${p.images.map((src, i) => `
-              <button type="button" class="pd-thumb" data-i="${i}" aria-label="Show image ${i + 1} of ${p.images.length}" aria-current="${i === 0}">${img(src, "")}</button>`).join("")}</div>` : ""}
+              <button type="button" class="pd-thumb" data-i="${i}" aria-label="${esc(t("pd.thumb", { i: i + 1, n: p.images.length }))}" aria-current="${i === 0}">${img(src, "")}</button>`).join("")}</div>` : ""}
           </div>
           <div class="pd-info">
-            ${c ? `<span class="eyebrow">${esc(c.name)}</span>` : ""}
-            <h1>${esc(p.name)}</h1>
-            <p class="pd-price">${p.price ? esc(p.price) : "Price on Request"}</p>
-            <p class="pd-desc">${esc(p.description)}</p>
-            <table class="spec-table"><tbody>${specs.map(([k, v]) => `<tr><th scope="row">${k}</th><td>${k === "Category" ? v : esc(v)}</td></tr>`).join("")}</tbody></table>
+            ${c ? `<span class="eyebrow">${esc(L(c, "name"))}</span>` : ""}
+            <h1>${esc(name)}</h1>
+            <p class="pd-price">${p.price ? esc(L(p, "price")) : esc(t("pd.priceReq"))}</p>
+            <p class="pd-desc">${esc(desc)}</p>
+            <table class="spec-table"><tbody>${specs.map(([k, v, html]) => `<tr><th scope="row">${esc(t(k))}</th><td>${html ? v : esc(v)}</td></tr>`).join("")}</tbody></table>
             <div class="qty-row">
               <div class="field">
-                <label for="pd-qty">Quantity</label>
+                <label for="pd-qty">${esc(t("pd.qty"))}</label>
                 <div class="qty">
-                  <button type="button" data-step="-1" aria-label="Decrease quantity">−</button>
+                  <button type="button" data-step="-1" aria-label="${esc(t("pd.dec"))}">−</button>
                   <input id="pd-qty" type="number" min="1" value="1" inputmode="numeric">
-                  <button type="button" data-step="1" aria-label="Increase quantity">+</button>
+                  <button type="button" data-step="1" aria-label="${esc(t("pd.inc"))}">+</button>
                 </div>
               </div>
             </div>
             <div class="pd-actions">
-              <button type="button" class="btn" data-quote="${esc(p.id)}" data-use-qty>${I.quote} Request a Quote</button>
-              <a class="btn btn-wa" id="pd-wa" href="#" target="_blank" rel="noopener">${I.whatsapp} Enquire on WhatsApp</a>
+              <button type="button" class="btn" data-quote="${esc(p.id)}" data-use-qty>${I.quote} ${esc(t("cta.quote"))}</button>
+              <a class="btn btn-wa" id="pd-wa" href="#" target="_blank" rel="noopener">${I.whatsapp} ${esc(t("pd.wa"))}</a>
             </div>
-            <p class="pd-note">Sizes, finishes and pricing vary by requirement. Contact us and we will share the details for this piece.</p>
+            <p class="pd-note">${esc(t("pd.note"))}</p>
           </div>
         </div>
       </section>
       ${(() => {
         const related = S.products.filter((x) => x.category === p.category && x.id !== p.id).concat(S.products.filter((x) => x.category !== p.category)).slice(0, 4);
         return related.length ? `<section class="section-alt"><div class="container">
-          <div class="section-head"><span class="eyebrow">You may also like</span><h2>More from our collection</h2></div>
+          <div class="section-head"><span class="eyebrow">${esc(t("pd.related"))}</span><h2>${esc(t("pd.relatedTitle"))}</h2></div>
           <div class="featured-grid">${related.map(productCard).join("")}</div></div></section>` : "";
       })()}`;
 
     // Gallery
     const main = $(".pd-main img", root);
     let cur = 0;
-    $$(".pd-thumb", root).forEach((t) => t.addEventListener("click", () => {
-      cur = +t.dataset.i;
+    $$(".pd-thumb", root).forEach((th) => th.addEventListener("click", () => {
+      cur = +th.dataset.i;
       main.src = p.images[cur];
-      $$(".pd-thumb", root).forEach((x) => x.setAttribute("aria-current", String(x === t)));
+      $$(".pd-thumb", root).forEach((x) => x.setAttribute("aria-current", String(x === th)));
     }));
-    $(".pd-main", root).addEventListener("click", () => openLightbox(p.images.map((src) => ({ src, alt: p.name })), cur));
+    $(".pd-main", root).addEventListener("click", () => openLightbox(p.images.map((src) => ({ src, alt: name })), cur));
 
     // Quantity + WhatsApp link
     const qty = $("#pd-qty");
@@ -689,7 +716,7 @@
     qty.addEventListener("input", syncWa);
     syncWa();
 
-    // Structured data
+    // Structured data (kept in English for search engines)
     const ld = {
       "@context": "https://schema.org",
       "@type": "Product",
@@ -733,12 +760,20 @@
       if (k === "location") el.textContent = location_;
       if (k === "phone") { el.textContent = B.phoneDisplay; if (el.tagName === "A") el.href = `tel:${B.phone}`; }
     });
-    $$("[data-wa]").forEach((a) => { a.href = waUrl(a.dataset.wa || `Hello ${B.name}, I would like to enquire about your sculptures.`); });
+    $$("[data-wa]").forEach((a) => { a.href = a.dataset.wa ? waUrl(a.dataset.wa) : genericWa(); });
     $$("[data-indiamart]").forEach((a) => { a.href = B.indiamart; });
     $$("[data-icon]").forEach((el) => { el.innerHTML = I[el.dataset.icon] || ""; });
   }
 
+  // After a language switch, return to the same scroll position
+  function restoreScroll() {
+    let y = null;
+    try { y = sessionStorage.getItem("ms-scroll"); sessionStorage.removeItem("ms-scroll"); } catch (e) { /* ignore */ }
+    if (y !== null) window.scrollTo({ top: +y, behavior: "instant" });
+  }
+
   /* ---------- Boot ---------- */
+  window.I18N.apply();
   renderHeader();
   renderFooter();
   renderModal();
@@ -749,4 +784,5 @@
   if (page === "collection") renderCollection();
   if (page === "product") renderProduct();
   initFadeIns();
+  restoreScroll();
 })();

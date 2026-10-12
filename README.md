@@ -33,6 +33,14 @@ Then open http://localhost:8000.
 - **Email, address, business hours, social links:** fill them in under `business`. The map uses `address` once it is set.
 - **Videos:** add YouTube IDs under `videos`. A video section then appears in the gallery.
 
+## English / Tamil
+
+- Visitors switch language with the **EN | தமிழ்** buttons in the header. The choice is remembered on their device.
+- Link straight to the Tamil version with `?lang=ta` (for example `index.html?lang=ta`), or to English with `?lang=en`.
+- Page text, buttons and form messages are in `js/i18n.js`. Each English line has a matching Tamil line.
+- Product and category names in Tamil are the `name_ta` and `description_ta` fields in `js/data.js`. If a Tamil field is missing, the English text is shown.
+- Enquiries sent in Tamil mode reach WhatsApp in Tamil.
+
 ## Enquiries and WhatsApp
 
 - Every enquiry form, "Enquire on WhatsApp" button, and the floating button opens WhatsApp with a pre-filled message addressed to **+91 99949 84943**. The customer taps Send.

@@ -15,21 +15,21 @@
   <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Spline+Sans:wght@300..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Spline+Sans:wght@300..700&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body data-page="collection">
-  <a class="skip-link" href="#main">Skip to content</a>
+  <a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
   <header id="site-header"></header>
   <main id="main">
     <div class="page-hero">
       <div class="container">
-        <nav class="breadcrumb" aria-label="Breadcrumb"><ol>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="collection.html">Collections</a></li>
+        <nav class="breadcrumb" aria-label="Breadcrumb" data-i18n-aria="crumb.label"><ol>
+          <li><a href="index.html" data-i18n="crumb.home">Home</a></li>
+          <li><a href="collection.html" data-i18n="crumb.collections">Collections</a></li>
           <li><span aria-current="page" id="crumb-current">All Sculptures</span></li>
         </ol></nav>
-        <span class="eyebrow">Our Collections</span>
+        <span class="eyebrow" data-i18n="col.eyebrow">Our Collections</span>
         <h1 id="collection-title">All Sculptures</h1>
         <p id="collection-desc"></p>
         <div class="chip-row" id="collection-chips" aria-label="Collections"></div>
@@ -39,13 +39,14 @@
       <div class="container">
         <div class="product-grid" id="product-grid"></div>
         <div class="section-foot">
-          <button type="button" class="btn" id="collection-enquire" data-quote>Enquire About These Products</button>
+          <button type="button" class="btn" id="collection-enquire" data-quote data-i18n="coll.enquire">Enquire About These Products</button>
         </div>
       </div>
     </section>
   </main>
   <footer id="site-footer"></footer>
   <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

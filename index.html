@@ -18,7 +18,7 @@
   <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Spline+Sans:wght@300..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Spline+Sans:wght@300..700&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="assets/images/products/vinayagar.jpg">
   <link rel="stylesheet" href="css/styles.css">
   <script type="application/ld+json">
@@ -37,7 +37,7 @@
   </script>
 </head>
 <body data-page="home">
-  <a class="skip-link" href="#main">Skip to content</a>
+  <a class="skip-link" href="#main" data-i18n="skip">Skip to content</a>
   <header id="site-header"></header>
 
   <main id="main">
@@ -45,23 +45,23 @@
     <section class="hero" id="home" aria-labelledby="hero-title">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <span class="eyebrow">Stone Sculptures · Madurai</span>
-          <h1 id="hero-title">Timeless Sculptures. <em>A Legacy of Craftsmanship.</em></h1>
-          <p class="hero-lead">With over 25 years of experience, Mahalakshmi Sculptures celebrates the beauty of traditional Indian artistry through carefully crafted sculptures that bring devotion, culture, and elegance to every space.</p>
+          <span class="eyebrow" data-i18n="hero.eyebrow">Stone Sculptures · Madurai</span>
+          <h1 id="hero-title" data-i18n-html="hero.title">Timeless Sculptures. <em>A Legacy of Craftsmanship.</em></h1>
+          <p class="hero-lead" data-i18n="hero.lead">With over 25 years of experience, Mahalakshmi Sculptures celebrates the beauty of traditional Indian artistry through carefully crafted sculptures that bring devotion, culture, and elegance to every space.</p>
           <div class="hero-actions">
-            <a class="btn" href="#collections">Explore Our Collection</a>
-            <a class="btn btn-outline" href="#enquiry">Enquire Now</a>
+            <a class="btn" href="#collections" data-i18n="hero.explore">Explore Our Collection</a>
+            <a class="btn btn-outline" href="#enquiry" data-i18n="hero.enquire">Enquire Now</a>
           </div>
-          <p class="trust-line"><span>25+ Years of Experience</span><span class="dot" aria-hidden="true"></span><span>Based in Madurai, Tamil Nadu</span></p>
+          <p class="trust-line"><span data-i18n="hero.trust1">25+ Years of Experience</span><span class="dot" aria-hidden="true"></span><span data-i18n="hero.trust2">Based in Madurai, Tamil Nadu</span></p>
         </div>
         <div class="hero-visual">
           <span class="arch-outline" aria-hidden="true"></span>
           <div class="arch-frame reveal-img">
-            <img src="assets/images/products/vinayagar.jpg" alt="Vinayagar stone statue by Mahalakshmi Sculptures" width="750" height="1000" fetchpriority="high">
+            <img src="assets/images/products/vinayagar.jpg" alt="Vinayagar stone statue by Mahalakshmi Sculptures" data-i18n-alt="hero.alt" width="750" height="1000" fetchpriority="high">
           </div>
           <div class="hero-caption">
-            <strong>Vinayagar Stone Statue</strong>
-            <span>From our collection</span>
+            <strong data-i18n="hero.capTitle">Vinayagar Stone Statue</strong>
+            <span data-i18n="hero.capSub">From our collection</span>
           </div>
         </div>
       </div>
@@ -74,19 +74,19 @@
       <div class="container about-grid">
         <div class="about-media fade-up">
           <div class="frame">
-            <img src="assets/images/products/ghaja-lakshmi.jpg" alt="Ghaja Lakshmi stone panel with Goddess Lakshmi flanked by elephants" width="990" height="750" loading="lazy" style="object-position: 50% 50%">
+            <img src="assets/images/products/ghaja-lakshmi.jpg" alt="Ghaja Lakshmi stone panel with Goddess Lakshmi flanked by elephants" data-i18n-alt="about.alt" width="990" height="750" loading="lazy" style="object-position: 50% 50%">
           </div>
-          <div class="about-badge" aria-hidden="true"><strong data-bind="years">25+</strong><span>Years of<br>Experience</span></div>
+          <div class="about-badge" aria-hidden="true"><strong data-bind="years">25+</strong><span data-i18n-html="about.badge">Years of<br>Experience</span></div>
         </div>
         <div class="about-copy fade-up">
-          <span class="eyebrow">About Us</span>
-          <h2 id="about-title">A Tradition of Excellence for Over 25 Years</h2>
-          <p>At Mahalakshmi Sculptures, we believe every sculpture represents more than form and detail—it reflects culture, devotion, and artistic expression. With over 25 years of experience in the sculpture business, we are committed to helping customers discover sculptures that reflect their preferences and requirements.</p>
-          <p>Based in Madurai, Tamil Nadu, we aim to provide a reliable and personal experience for customers seeking traditional sculptures and artistic pieces.</p>
+          <span class="eyebrow" data-i18n="about.eyebrow">About Us</span>
+          <h2 id="about-title" data-i18n="about.title">A Tradition of Excellence for Over 25 Years</h2>
+          <p data-i18n="about.p1">At Mahalakshmi Sculptures, we believe every sculpture represents more than form and detail—it reflects culture, devotion, and artistic expression. With over 25 years of experience in the sculpture business, we are committed to helping customers discover sculptures that reflect their preferences and requirements.</p>
+          <p data-i18n="about.p2">Based in Madurai, Tamil Nadu, we aim to provide a reliable and personal experience for customers seeking traditional sculptures and artistic pieces.</p>
           <div class="highlights">
-            <div class="highlight"><span class="icon" data-icon="years"></span><h3>25+ Years of Experience</h3></div>
-            <div class="highlight"><span class="icon" data-icon="artistry"></span><h3>Traditional Indian Artistry</h3></div>
-            <div class="highlight"><span class="icon" data-icon="service"></span><h3>Customer-Focused Service</h3></div>
+            <div class="highlight"><span class="icon" data-icon="years"></span><h3 data-i18n="about.h1">25+ Years of Experience</h3></div>
+            <div class="highlight"><span class="icon" data-icon="artistry"></span><h3 data-i18n="about.h2">Traditional Indian Artistry</h3></div>
+            <div class="highlight"><span class="icon" data-icon="service"></span><h3 data-i18n="about.h3">Customer-Focused Service</h3></div>
           </div>
         </div>
       </div>
@@ -96,9 +96,9 @@
     <section id="collections" class="section-alt" aria-labelledby="collections-title">
       <div class="container">
         <div class="section-head fade-up">
-          <span class="eyebrow">Our Collections</span>
-          <h2 id="collections-title">Explore Our Collection</h2>
-          <p>Discover sculptural pieces inspired by Indian traditions, artistic detail, and timeless design.</p>
+          <span class="eyebrow" data-i18n="col.eyebrow">Our Collections</span>
+          <h2 id="collections-title" data-i18n="col.title">Explore Our Collection</h2>
+          <p data-i18n="col.sub">Discover sculptural pieces inspired by Indian traditions, artistic detail, and timeless design.</p>
         </div>
         <div class="collection-grid" id="collection-grid"></div>
       </div>
@@ -108,12 +108,12 @@
     <section id="featured" aria-labelledby="featured-title">
       <div class="container">
         <div class="section-head fade-up">
-          <span class="eyebrow">Featured</span>
-          <h2 id="featured-title">Featured Sculptures</h2>
+          <span class="eyebrow" data-i18n="feat.eyebrow">Featured</span>
+          <h2 id="featured-title" data-i18n="feat.title">Featured Sculptures</h2>
           <div class="ornament" aria-hidden="true"><span data-icon="lotus" style="width:22px;height:22px;display:inline-block"></span></div>
         </div>
         <div class="featured-grid" id="featured-grid"></div>
-        <div class="section-foot"><a class="link-arrow" href="collection.html">View all sculptures <span data-icon="arrow"></span></a></div>
+        <div class="section-foot"><a class="link-arrow" href="collection.html"><span data-i18n="feat.viewAll">View all sculptures</span> <span data-icon="arrow"></span></a></div>
       </div>
     </section>
 
@@ -121,9 +121,9 @@
     <section id="gallery" class="section-alt" aria-labelledby="gallery-title">
       <div class="container">
         <div class="section-head fade-up">
-          <span class="eyebrow">Our Gallery</span>
-          <h2 id="gallery-title">Artistry in Every Detail</h2>
-          <p>Photographs of our stone sculptures. Select any image to view it larger.</p>
+          <span class="eyebrow" data-i18n="gal.eyebrow">Our Gallery</span>
+          <h2 id="gallery-title" data-i18n="gal.title">Artistry in Every Detail</h2>
+          <p data-i18n="gal.sub">Photographs of our stone sculptures. Select any image to view it larger.</p>
         </div>
         <div class="filter-bar" id="gallery-filters" role="group" aria-label="Filter gallery by category"></div>
         <div class="gallery-grid" id="gallery-grid"></div>
@@ -135,15 +135,15 @@
     <section id="why" class="why" aria-labelledby="why-title">
       <div class="container">
         <div class="section-head fade-up">
-          <span class="eyebrow">Why Choose Mahalakshmi Sculptures?</span>
-          <h2 id="why-title">Experience You Can Trust. Craftsmanship You Can Appreciate.</h2>
+          <span class="eyebrow" data-i18n="why.eyebrow">Why Choose Mahalakshmi Sculptures?</span>
+          <h2 id="why-title" data-i18n="why.title">Experience You Can Trust. Craftsmanship You Can Appreciate.</h2>
         </div>
         <div class="why-grid">
-          <div class="why-item fade-up"><span class="icon" data-icon="years"></span><h3>25+ Years</h3><p>Over 25 years of experience in the sculpture business.</p></div>
-          <div class="why-item fade-up"><span class="icon" data-icon="artistry"></span><h3>Rooted in Tradition</h3><p>A collection inspired by traditional Indian sculpture.</p></div>
-          <div class="why-item fade-up"><span class="icon" data-icon="guide"></span><h3>Helpful Guidance</h3><p>Product information and guidance to help you choose.</p></div>
-          <div class="why-item fade-up"><span class="icon" data-icon="phone"></span><h3>Direct Contact</h3><p>Speak to us directly by phone or WhatsApp about any product.</p></div>
-          <div class="why-item fade-up"><span class="icon" data-icon="quote"></span><h3>Clear Quotations</h3><p>Assistance with product specifications and quotations.</p></div>
+          <div class="why-item fade-up"><span class="icon" data-icon="years"></span><h3 data-i18n="why.1t">25+ Years</h3><p data-i18n="why.1p">Over 25 years of experience in the sculpture business.</p></div>
+          <div class="why-item fade-up"><span class="icon" data-icon="artistry"></span><h3 data-i18n="why.2t">Rooted in Tradition</h3><p data-i18n="why.2p">A collection inspired by traditional Indian sculpture.</p></div>
+          <div class="why-item fade-up"><span class="icon" data-icon="guide"></span><h3 data-i18n="why.3t">Helpful Guidance</h3><p data-i18n="why.3p">Product information and guidance to help you choose.</p></div>
+          <div class="why-item fade-up"><span class="icon" data-icon="phone"></span><h3 data-i18n="why.4t">Direct Contact</h3><p data-i18n="why.4p">Speak to us directly by phone or WhatsApp about any product.</p></div>
+          <div class="why-item fade-up"><span class="icon" data-icon="quote"></span><h3 data-i18n="why.5t">Clear Quotations</h3><p data-i18n="why.5p">Assistance with product specifications and quotations.</p></div>
         </div>
       </div>
     </section>
@@ -152,25 +152,25 @@
     <section id="enquiry" aria-labelledby="enquiry-title">
       <div class="container">
         <div class="section-head fade-up">
-          <span class="eyebrow">Enquiry</span>
-          <h2 id="enquiry-title">Looking for the Perfect Sculpture?</h2>
-          <p>Tell us what you are looking for, and our team will help you with product details and pricing.</p>
+          <span class="eyebrow" data-i18n="enq.eyebrow">Enquiry</span>
+          <h2 id="enquiry-title" data-i18n="enq.title">Looking for the Perfect Sculpture?</h2>
+          <p data-i18n="enq.sub">Tell us what you are looking for, and our team will help you with product details and pricing.</p>
         </div>
         <div class="enquiry-grid">
           <div class="form-card fade-up" id="enquiry-form-holder">
             <noscript><p>Please enable JavaScript to use the enquiry form, or call / WhatsApp us on +91 99949 84943.</p></noscript>
           </div>
-          <aside class="enquiry-aside fade-up" aria-label="Contact us directly">
+          <aside class="enquiry-aside fade-up" aria-label="Contact us directly" data-i18n-aria="aside.label">
             <div class="aside-card">
-              <h3>Prefer to talk?</h3>
-              <p>Call or message us directly for product details, sizes and quotations.</p>
+              <h3 data-i18n="aside.title">Prefer to talk?</h3>
+              <p data-i18n="aside.text">Call or message us directly for product details, sizes and quotations.</p>
               <a class="btn btn-ghost-light" data-bind="phone" href="tel:+919994984943">+91 99949 84943</a>
-              <a class="btn btn-wa" data-wa href="https://wa.me/919994984943" target="_blank" rel="noopener"><span data-icon="whatsapp"></span> WhatsApp Us</a>
+              <a class="btn btn-wa" data-wa href="https://wa.me/919994984943" target="_blank" rel="noopener"><span data-icon="whatsapp"></span> <span data-i18n="cta.waUs">WhatsApp Us</span></a>
             </div>
             <ul class="aside-list">
-              <li><span data-icon="guide"></span>Mention the deity or design, the approximate size and the quantity you need.</li>
-              <li><span data-icon="pin"></span>Let us know your delivery location so we can discuss the details.</li>
-              <li><span data-icon="quote"></span>Pricing is shared on request, based on your requirement.</li>
+              <li><span data-icon="guide"></span><span data-i18n="aside.l1">Mention the deity or design, the approximate size and the quantity you need.</span></li>
+              <li><span data-icon="pin"></span><span data-i18n="aside.l2">Let us know your delivery location so we can discuss the details.</span></li>
+              <li><span data-icon="quote"></span><span data-i18n="aside.l3">Pricing is shared on request, based on your requirement.</span></li>
             </ul>
           </aside>
         </div>
@@ -181,13 +181,13 @@
     <section id="contact" class="section-alt" aria-labelledby="contact-title">
       <div class="container contact-grid">
         <div class="fade-up">
-          <span class="eyebrow">Contact Us</span>
-          <h2 id="contact-title">Get in Touch With Us</h2>
+          <span class="eyebrow" data-i18n="contact.eyebrow">Contact Us</span>
+          <h2 id="contact-title" data-i18n="contact.title">Get in Touch With Us</h2>
           <ul class="contact-list" id="contact-list"></ul>
           <div class="contact-actions">
-            <a class="btn" href="tel:+919994984943"><span data-icon="phone"></span> Call Now</a>
-            <a class="btn btn-wa" data-wa href="https://wa.me/919994984943" target="_blank" rel="noopener"><span data-icon="whatsapp"></span> WhatsApp</a>
-            <button type="button" class="btn btn-outline" data-quote>Request a Quote</button>
+            <a class="btn" href="tel:+919994984943"><span data-icon="phone"></span> <span data-i18n="cta.call">Call Now</span></a>
+            <a class="btn btn-wa" data-wa href="https://wa.me/919994984943" target="_blank" rel="noopener"><span data-icon="whatsapp"></span> <span data-i18n="cta.wa">WhatsApp</span></a>
+            <button type="button" class="btn btn-outline" data-quote data-i18n="cta.quote">Request a Quote</button>
           </div>
         </div>
         <div class="map-wrap fade-up">
@@ -200,6 +200,7 @@
   <footer id="site-footer"></footer>
 
   <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
